@@ -1,19 +1,19 @@
 package server
 
 import (
-	"net/http"
 	"crypto/tls"
-	"github.com/spiffe/go-spiffe/spiffe"
+	"github.com/maxlambrecht/svid-exercise/service/validator"
 	"log"
-	"crypto/x509"
+	"net/http"
+	"fmt"
 )
 
 type AuthServer struct {
-	Addr     string
-	CertFile string
-	KeyFile  string
-	SpiffeID string
-	Validator Validator
+	Addr          string
+	CertFile      string
+	KeyFile       string
+	SpiffeID      string
+	CertValidator validator.Validator
 }
 
 func (s *AuthServer) Start() {
@@ -28,28 +28,16 @@ func (s *AuthServer) Start() {
 
 	http.HandleFunc("/auth", s.authenticateHandler)
 
+	fmt.Printf("Server listening on address %s ", server.Addr)
 	log.Fatal(server.ListenAndServeTLS(s.CertFile, s.KeyFile))
 }
 
 func (s *AuthServer) authenticateHandler(response http.ResponseWriter, request *http.Request) {
 
-	err := s.Validator.ValidateID(s.SpiffeID, request.TLS.PeerCertificates[0])
+	err := s.CertValidator.ValidateID(s.SpiffeID, request.TLS.PeerCertificates[0])
 	if err != nil {
 		response.WriteHeader(401)
 		return
 	}
 	response.WriteHeader(200)
 }
-
-// Move to another file and add Tests
-type Validator interface {
-	ValidateID(id string, cert *x509.Certificate) error
-}
-
-type SvidValidator struct {}
-
-func (v SvidValidator) ValidateID(id string, cert *x509.Certificate) error {
-	return spiffe.MatchID([]string{id}, cert)
-}
-
-

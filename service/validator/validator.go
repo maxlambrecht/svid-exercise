@@ -1,21 +1,35 @@
 package validator
 
 import (
-	"io"
+	"crypto/x509"
+	"errors"
 	"github.com/spiffe/go-spiffe/uri"
-	"github.com/astaxie/beego/logs"
-	"github.com/maxlambrecht/svid-exercise/util"
 )
 
-// MatchCertificateID takes a string ID and X.509 certificate as a io.Reader
-// and validates that the ID matches with an ID in the certificate
-func MatchCertificateID(id string, cert io.Reader) (bool, error) {
-	certIds, err := uri.FGetURINamesFromPEM(cert)
-	if err != nil {
-		logs.Error("Error at reading certificate ", err)
-		return false, err
-	}
 
-	return util.Contains(certIds, id), nil
+// ErrInvalidaID is returned when the Certificate does not contain
+// a Spiffe ID that is valid
+var ErrInvalidID = errors.New("Certificate ID is not valid ")
+
+type Validator interface {
+	ValidateID(id string, cert *x509.Certificate) error
 }
 
+type SvidValidator struct{}
+
+// ValidateID validates that the certificate contains a Subject Alternative Name be equals to the id
+// Returns an error if the Certificate cannot be parsed
+// Returns ErrInvalidID if the id could not be found among the URI SANs
+func (v SvidValidator) ValidateID(id string, cert *x509.Certificate) error {
+	certIds, err := uri.GetURINamesFromCertificate(cert)
+	if err != nil {
+		return err
+	}
+
+	for _, certId := range certIds {
+		if certId == id {
+			return nil
+		}
+	}
+	return ErrInvalidID
+}

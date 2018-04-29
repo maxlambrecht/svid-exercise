@@ -1,12 +1,13 @@
 package server
 
 import (
-	"testing"
-	"net/http/httptest"
 	"crypto/tls"
 	"crypto/x509"
-	"path"
 	"net/http"
+	"net/http/httptest"
+	"path"
+	"testing"
+	"github.com/maxlambrecht/svid-exercise/service/validator"
 )
 
 const assetsDir = "../test-assets"
@@ -14,7 +15,7 @@ const assetsDir = "../test-assets"
 func TestAuthenticateHandler(t *testing.T) {
 
 	authServer := AuthServer{
-		Validator: SvidValidator{},
+		CertValidator: validator.SvidValidator{},
 	}
 
 	// Create the client request that will be used in the test cases and inject the SVID
@@ -23,7 +24,6 @@ func TestAuthenticateHandler(t *testing.T) {
 	request.TLS = &tls.ConnectionState{}
 	request.TLS.PeerCertificates = make([]*x509.Certificate, 1)
 	request.TLS.PeerCertificates[0] = x509Cert
-
 
 	testCases := []struct {
 		name         string
@@ -55,7 +55,7 @@ func TestAuthenticateHandler(t *testing.T) {
 	}
 }
 
-func helperLoadCertificate() (*x509.Certificate) {
+func helperLoadCertificate() *x509.Certificate {
 	cert, _ := tls.LoadX509KeyPair(path.Join(assetsDir, "cert.pem"), path.Join(assetsDir, "key.pem"))
 	certificate := []tls.Certificate{cert}
 	x509Cert, _ := x509.ParseCertificate(certificate[0].Certificate[0])

@@ -1,11 +1,11 @@
 package main
 
 import (
-	"log"
 	"crypto/tls"
-	"net/http"
-	"fmt"
 	"flag"
+	"fmt"
+	"log"
+	"net/http"
 )
 
 var url string
@@ -14,7 +14,7 @@ var keyPath string
 
 func init() {
 	flag.StringVar(&url, "url", "https://localhost:3000/auth", "Authentication service url")
-	flag.StringVar(&certPath,"cert", "", "Client Certificate File")
+	flag.StringVar(&certPath, "cert", "", "Client Certificate File")
 	flag.StringVar(&keyPath, "key", "", "Client Certificate Key File")
 	flag.Parse()
 }
@@ -32,21 +32,20 @@ func main() {
 	}
 
 	// Load client certificate
-	cert, err:= tls.LoadX509KeyPair(certPath, keyPath)
+	cert, err := tls.LoadX509KeyPair(certPath, keyPath)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Setup HTTPS client
 	tlsConfig := &tls.Config{
-		Certificates: []tls.Certificate{cert},
-		InsecureSkipVerify:true,
+		Certificates:       []tls.Certificate{cert},
+		InsecureSkipVerify: true,
 	}
 
 	// Configure the client
 	transport := &http.Transport{TLSClientConfig: tlsConfig}
 	client := &http.Client{Transport: transport}
-
 
 	// Perform the request
 	resp, err := client.Get(url)

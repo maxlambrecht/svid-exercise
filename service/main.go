@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/maxlambrecht/svid-exercise/service/server"
 	"flag"
 	"fmt"
+	"github.com/maxlambrecht/svid-exercise/service/server"
+	"github.com/maxlambrecht/svid-exercise/service/validator"
 )
-
 
 var addr string
 var spiffeID string
@@ -15,7 +15,7 @@ var keyPath string
 func init() {
 	flag.StringVar(&addr, "addr", ":3000", "TCP address to listen on")
 	flag.StringVar(&spiffeID, "spiffeid", "", "Spiffe ID")
-	flag.StringVar(&certPath,"cert", "", "Client Certificate File")
+	flag.StringVar(&certPath, "cert", "", "Client Certificate File")
 	flag.StringVar(&keyPath, "key", "", "Client Certificate Key File")
 	flag.Parse()
 }
@@ -38,11 +38,11 @@ func main() {
 	}
 
 	authServer := server.AuthServer{
-		Addr:     addr,
-		SpiffeID: spiffeID,
-		CertFile: certPath,
-		KeyFile:  keyPath,
-		Validator: server.SvidValidator{},
+		Addr:          addr,
+		SpiffeID:      spiffeID,
+		CertFile:      certPath,
+		KeyFile:       keyPath,
+		CertValidator: validator.SvidValidator{},
 	}
 
 	authServer.Start()
