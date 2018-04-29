@@ -1,4 +1,4 @@
-##SVID basic validation
+## SVID basic validation
 
 ##### This example contains: 
  - A HTTP-based SPIFFE Verifiable Identity Document (SVID) validation service that takes a SPIFFE ID as a configuration parameter. 
