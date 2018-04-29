@@ -5,13 +5,34 @@ import (
 	"crypto/tls"
 	"net/http"
 	"fmt"
+	"flag"
 )
 
-func main() {
-	// Make this script configurable by command line
+var url string
+var certPath string
+var keyPath string
 
-	// Load client cert
-	cert, err:= tls.LoadX509KeyPair("certs/client_cert.pem", "certs/client_key.pem")
+func init() {
+	flag.StringVar(&url, "url", "https://localhost:3000/auth", "Authentication service url")
+	flag.StringVar(&certPath,"cert", "", "Client Certificate File")
+	flag.StringVar(&keyPath, "key", "", "Client Certificate Key File")
+	flag.Parse()
+}
+
+func main() {
+
+	if certPath == "" {
+		fmt.Println("Need to provide a certificate")
+		return
+	}
+
+	if keyPath == "" {
+		fmt.Println("Need to provide a certificate key ")
+		return
+	}
+
+	// Load client certificate
+	cert, err:= tls.LoadX509KeyPair(certPath, keyPath)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -28,13 +49,19 @@ func main() {
 
 
 	// Perform the request
-	resp, err := client.Get("https://localhost:3000/auth")
+	resp, err := client.Get(url)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
 
-    if resp.StatusCode == 200 {
-    	fmt.Println("Authentication succeed")
+	fmt.Printf("Response code: %d\n", resp.StatusCode)
+	switch resp.StatusCode {
+	case 200:
+		fmt.Println("Authentication Succeed")
+	case 401:
+		fmt.Println("Authentication Failed. Invalidad SpiffeID")
+	default:
+		fmt.Println("Authentication Failed. Error not identified")
+
 	}
-	fmt.Println(resp.StatusCode)
 }
