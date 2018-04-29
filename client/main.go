@@ -22,12 +22,12 @@ func init() {
 func main() {
 
 	if certPath == "" {
-		fmt.Println("Need to provide a certificate")
+		fmt.Println("Error: Missing client certificate")
 		return
 	}
 
 	if keyPath == "" {
-		fmt.Println("Need to provide a certificate key ")
+		fmt.Println("Error: Missing client certificate key ")
 		return
 	}
 
@@ -59,7 +59,7 @@ func main() {
 	case 200:
 		fmt.Println("Authentication Succeed")
 	case 401:
-		fmt.Println("Authentication Failed. Invalidad SpiffeID")
+		fmt.Println("Authentication Failed. Invalid SpiffeID")
 	default:
 		fmt.Println("Authentication Failed. Error not identified")
 

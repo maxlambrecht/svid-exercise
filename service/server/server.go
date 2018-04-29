@@ -46,9 +46,9 @@ type Validator interface {
 	ValidateID(id string, cert *x509.Certificate) error
 }
 
-type CertValidator struct {}
+type SvidValidator struct {}
 
-func (v CertValidator) ValidateID(id string, cert *x509.Certificate) error {
+func (v SvidValidator) ValidateID(id string, cert *x509.Certificate) error {
 	return spiffe.MatchID([]string{id}, cert)
 }
 

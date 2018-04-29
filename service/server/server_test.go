@@ -14,7 +14,7 @@ const assetsDir = "../test-assets"
 func TestAuthenticateHandler(t *testing.T) {
 
 	authServer := AuthServer{
-		Validator: CertValidator{},
+		Validator: SvidValidator{},
 	}
 
 	// Create the client request that will be used in the test cases and inject the SVID

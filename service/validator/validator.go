@@ -4,7 +4,7 @@ import (
 	"io"
 	"github.com/spiffe/go-spiffe/uri"
 	"github.com/astaxie/beego/logs"
-	"github.com/maxlambrecht/scytale-exercice/util"
+	"github.com/maxlambrecht/svid-exercise/util"
 )
 
 // MatchCertificateID takes a string ID and X.509 certificate as a io.Reader
