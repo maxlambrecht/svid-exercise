@@ -1,0 +1,22 @@
+[ req ]
+default_bits            = 1024
+default_md              = sha1
+distinguished_name      = req_distinguished_name
+req_extensions  = v3_req
+x509_extensions = usr_cert
+[ req_distinguished_name ]
+[ usr_cert ]
+basicConstraints=CA:FALSE
+nsCertType = client, server
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth, clientAuth, codeSigning
+nsComment = "OpenSSL Generated Certificate"
+subjectKeyIdentifier=hash
+authorityKeyIdentifier=keyid,issuer
+subjectAltName = @alt_names
+[ v3_req ]
+extendedKeyUsage = serverAuth, clientAuth, codeSigning, emailProtection
+basicConstraints = CA:FALSE
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+[alt_names]
+URI.1  = spiffe://example.com/otherservice
