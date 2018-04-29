@@ -2,7 +2,7 @@
 
 ##### This example contains: 
  - A HTTP-based SPIFFE Verifiable Identity Document (SVID) validation service that takes a SPIFFE ID as a configuration parameter. 
- - A client that connects over mTLS using an SVID that is validated.
+ - A client that connects over mTLS using an SVID.
      
 ###### The service returns:
 
