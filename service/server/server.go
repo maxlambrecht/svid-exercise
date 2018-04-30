@@ -61,6 +61,7 @@ func (s *AuthServer) Start() {
 		log.Fatalf("Could not listen on %s: %v\n", s.Addr, err)
 	}
 
+	//Wait for 'done' signal
 	<-done
 }
 
