@@ -43,7 +43,6 @@ go test ./... -v -cover
     --- PASS: TestAuthenticateHandler/valid_ID (0.00s)
     --- PASS: TestAuthenticateHandler/invalid_ID (0.00s)
 === RUN   TestHTTPSServer
-Server listening on address :3457
 --- PASS: TestHTTPSServer (0.05s)
 PASS
 coverage: 87.5% of statements
