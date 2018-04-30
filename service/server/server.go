@@ -5,7 +5,6 @@ import (
 	"github.com/maxlambrecht/svid-exercise/service/validator"
 	"net/http"
 	"log"
-	"fmt"
 )
 
 // AuthServer defines the configuration options
@@ -50,7 +49,7 @@ func (s *AuthServer) Start() {
 	}()
 
 
-	fmt.Printf("Server listening on address %s\n", server.Addr)
+	log.Printf("Server listening on address %s\n", server.Addr)
 	if err := server.ListenAndServeTLS(s.CertFile, s.KeyFile); err != nil {
 		log.Fatalf("Could not listen on %s: %v\n", s.Addr, err)
 	}
