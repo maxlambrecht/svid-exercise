@@ -41,7 +41,7 @@ go test ./... -v -cover
 
 ##### Create certificate
 
-Edit SpiffeID in file certs/conf.cnf:
+Edit SpiffeID in file _certs/conf.cnf_:
 
 ```
 [alt_names]
@@ -49,13 +49,13 @@ URI.1  = spiffe://example.com/service
 
 ```
 
-Run generate-cert.sh in directory _certs_:
+Run _generate-cert.sh_ in directory _certs_:
 
 ```
 sh generate-cert.sh cert_file.pem key_file.pem
 ```
 
-Run view-cert-san.sh to verify the SpiffeID in the Certificate:
+Run _view-cert-san.sh_ to verify the SpiffeID in the Certificate:
 
 
 ```
