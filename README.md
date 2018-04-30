@@ -27,12 +27,14 @@ go run service/main.go --spiffeid spiffe://example.com/service --cert certs/serv
 
 ###### Run the Client
 
+The client uses a certificate that has a Subject Alternative Name=spiffe://example.com/service:
 ```
 go run client/main.go --cert certs/client_cert.pem --key certs/client_key.pem 
 Response code: 200
 Authentication Succeed
 ```
 
+The client uses a certificate with an untrusted Subject Alternative Name or not SAN at all
 ```
 go run client/main.go --cert certs/unknown_client_cert.pem --key certs/unknown_client_key.pem
 Response code: 401

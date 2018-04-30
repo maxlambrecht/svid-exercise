@@ -56,13 +56,6 @@ func TestAuthenticateHandler(t *testing.T) {
 	}
 }
 
-func helperLoadCertificate() *x509.Certificate {
-	cert, _ := tls.LoadX509KeyPair(path.Join(assetsDir, "cert.pem"), path.Join(assetsDir, "key.pem"))
-	certificate := []tls.Certificate{cert}
-	x509Cert, _ := x509.ParseCertificate(certificate[0].Certificate[0])
-	return x509Cert
-}
-
 // Integration Test for testing that the HTTPS server handle and validate correctly
 // the SpiffeID in the SVID x509 certificates sent by the clients using TLS
 func TestHTTPSServer(t *testing.T) {
@@ -133,6 +126,10 @@ func createClient(cert string, key string) *http.Client {
 	transport := &http.Transport{TLSClientConfig: tlsConfig}
 	return &http.Client{Transport: transport}
 }
-func sendRequestFromTrustedClient(t *testing.T) {
 
+func helperLoadCertificate() *x509.Certificate {
+	cert, _ := tls.LoadX509KeyPair(path.Join(assetsDir, "cert.pem"), path.Join(assetsDir, "key.pem"))
+	certificate := []tls.Certificate{cert}
+	x509Cert, _ := x509.ParseCertificate(certificate[0].Certificate[0])
+	return x509Cert
 }
