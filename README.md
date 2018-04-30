@@ -11,7 +11,7 @@
 
 ##### How to run the example
 
-###### Get the code and the dependencies
+###### Get the code and dependencies
 
 ```
 go get github.com/maxlambrecht/svid-exercise
