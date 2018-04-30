@@ -1,5 +1,7 @@
 ## SVID basic validation
 
+[![Coverage Status](https://coveralls.io/repos/github/spiffe/spire/badge.svg?branch=master)](https://coveralls.io/github/spiffe/spire?branch=master)
+
 ##### This example contains: 
  - A HTTP-based SPIFFE Verifiable Identity Document (SVID) validation service that takes a SPIFFE ID as a configuration parameter. 
  - A client that connects over mTLS using an SVID.
@@ -31,5 +33,32 @@ Authentication Failed. Invalid SpiffeID
 ```
 
 
+#### Appendix
 
+##### Create certificate
+
+Edit SpiffeID in file certs/conf.cnf:
+
+```
+[alt_names]
+URI.1  = spiffe://example.com/service
+
+```
+
+Run generate-cert.sh in directory _certs_:
+
+```
+sh generate-cert.sh cert_file.pem key_file.pem
+```
+
+Run view-cert-san.sh to verify the SpiffeID in the Certificate:
+
+
+```
+sh view-cert-san.sh cert1.pem
+
+X509v3 Subject Alternative Name: 
+                URI:spiffe://example.com/service
+
+```
 

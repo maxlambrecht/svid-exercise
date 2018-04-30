@@ -19,4 +19,4 @@ extendedKeyUsage = serverAuth, clientAuth, codeSigning, emailProtection
 basicConstraints = CA:FALSE
 keyUsage = nonRepudiation, digitalSignature, keyEncipherment
 [alt_names]
-URI.1  = spiffe://example.com/otherservice
+URI.1  = spiffe://example.com/service
