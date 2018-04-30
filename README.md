@@ -23,7 +23,11 @@ go get ./...
 ###### Run the Server
 ```
 go run service/main.go --spiffeid spiffe://example.com/service --cert certs/server_cert.pem --key certs/server_key.pem
+Server listening on address :3000
 ```
+
+By default the server listen on _https://localhost:3000_
+You can use another address using the option _--addr_
 
 ###### Run the Client
 
@@ -40,6 +44,9 @@ go run client/main.go --cert certs/unknown_client_cert.pem --key certs/unknown_c
 Response code: 401
 Authentication Failed. Invalid SpiffeID
 ```
+
+By default the client sends the request to _https://localhost:3000/auth_
+You can use another address using the option _--url_
 
 ###### Run Tests
 
