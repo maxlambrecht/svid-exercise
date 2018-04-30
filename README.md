@@ -15,7 +15,7 @@
 ###### Get the code and dependencies
 
 ```
-go get -u github.com/maxlambrecht/svid-exercise
+$ go get -u github.com/maxlambrecht/svid-exercise
 cd ~/go/src/github.com/maxlambrecht/svid-exercise
 go get ./... 
 ```
@@ -23,7 +23,7 @@ go get ./...
 
 ###### Run the Server
 ```
-go run service/main.go --spiffeid spiffe://example.com/service --cert certs/server_cert.pem --key certs/server_key.pem
+$ go run service/main.go --spiffeid spiffe://example.com/service --cert certs/server_cert.pem --key certs/server_key.pem
 Server listening on address :3000
 ```
 
@@ -31,7 +31,7 @@ By default the server listens on _https://localhost:3000_
 To listen on another address use the option _--addr_
 
 ```
-go run service/main.go --spiffeid spiffe://example.com/service --cert certs/server_cert.pem --key certs/server_key.pem --addr localhost:4000
+$ go run service/main.go --spiffeid spiffe://example.com/service --cert certs/server_cert.pem --key certs/server_key.pem --addr localhost:4000
 Server listening on address localhost:4000
 ```
 
@@ -39,14 +39,14 @@ Server listening on address localhost:4000
 
 ```
 # using a certificate that has a Subject Alternative Name=spiffe://example.com/service:
-go run client/main.go --cert certs/client_cert.pem --key certs/client_key.pem 
+$ go run client/main.go --cert certs/client_cert.pem --key certs/client_key.pem 
 Response code: 200
 Authentication Succeed
 ```
 
 ```
 # using a certificate with an untrusted Subject Alternative Name or not SAN at all
-go run client/main.go --cert certs/unknown_client_cert.pem --key certs/unknown_client_key.pem
+$ go run client/main.go --cert certs/unknown_client_cert.pem --key certs/unknown_client_key.pem
 Response code: 401
 Authentication Failed. Invalid SpiffeID
 ```
@@ -55,7 +55,7 @@ By default the client sends the requests to _https://localhost:3000/auth_
 To send the requests to another address use the option _--url_ 
 
 ```
-go run client/main.go --cert certs/client_cert.pem --key certs/client_key.pem --url https://localhost:4000/auth
+$ go run client/main.go --cert certs/client_cert.pem --key certs/client_key.pem --url https://localhost:4000/auth
 Response code: 200
 Authentication Succeed
 ```
@@ -65,7 +65,7 @@ Authentication Succeed
 
 
 ```
-go test ./... -v -cover
+$ go test ./... -v -cover
 
 === RUN   TestAuthenticateHandler
 === RUN   TestAuthenticateHandler/valid_ID
