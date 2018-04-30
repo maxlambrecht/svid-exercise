@@ -30,6 +30,12 @@ Response code: 401
 Authentication Failed. Invalid SpiffeID
 ```
 
+###### Run Tests
+
+
+```
+go test ./... -v -cover
+```
 
 #### Appendix
 
