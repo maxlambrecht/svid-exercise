@@ -3,12 +3,12 @@ package server
 import (
 	"crypto/tls"
 	"crypto/x509"
+	"github.com/maxlambrecht/svid-exercise/service/validator"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"path"
 	"testing"
-	"github.com/maxlambrecht/svid-exercise/service/validator"
-	"log"
 )
 
 const assetsDir = "../test-assets"
@@ -92,8 +92,6 @@ func TestHTTPSServer(t *testing.T) {
 		t.Errorf("Response code was %v; want 200", res.StatusCode)
 	}
 
-
-
 	// Create a client with an untrusted SpiffeID
 	client = createClient(untrustedCert, untrustedKey)
 
@@ -109,7 +107,7 @@ func TestHTTPSServer(t *testing.T) {
 	}
 
 	// Send signal to shutdown the server
-	shutdown<-1
+	shutdown <- 1
 }
 
 func createClient(cert string, key string) *http.Client {

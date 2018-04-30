@@ -1,10 +1,10 @@
 package validator
 
 import (
-	"testing"
 	"crypto/tls"
 	"crypto/x509"
 	"path"
+	"testing"
 )
 
 const assetsDir = "../test-assets"
@@ -20,7 +20,7 @@ func TestValidateID(t *testing.T) {
 		{"Recognized Spiffe ID",
 			"spiffe://example.com/service",
 			nil,
-			},
+		},
 		{"Unrecognized Spiffe ID",
 			"spiffe://example.com/other-service",
 			ErrInvalidID},

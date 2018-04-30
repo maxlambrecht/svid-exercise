@@ -3,8 +3,8 @@ package server
 import (
 	"crypto/tls"
 	"github.com/maxlambrecht/svid-exercise/service/validator"
-	"net/http"
 	"log"
+	"net/http"
 )
 
 // AuthServer defines the configuration options
@@ -12,12 +12,12 @@ import (
 // over which is define the Start method to create
 // a HTTPS server
 type AuthServer struct {
-	Addr          string
-	CertFile      string
-	KeyFile       string
+	Addr     string
+	CertFile string
+	KeyFile  string
 	// SVID SpiffeID that is trusted by the server and will be used
 	// to validate the SVID certificate provided by the client
-	SpiffeID      string
+	SpiffeID string
 	// Used to validate the SpiffeID in the client SVID certificate
 	CertValidator validator.Validator
 }
@@ -40,7 +40,6 @@ func (s *AuthServer) Start() {
 
 	http.HandleFunc("/auth", s.authenticateHandler)
 
-
 	// Defines a way to send a signal to the server to shutdown
 	// Used as a workaround to handle the shutdown in integration tests
 	// It could be used as a way to gracefully shutdown the server when
@@ -52,9 +51,8 @@ func (s *AuthServer) Start() {
 		<-shutdown
 		server.Close()
 		// Send 'done' signal
-		done<-1
+		done <- 1
 	}()
-
 
 	log.Printf("Server listening on address %s\n", server.Addr)
 	if err := server.ListenAndServeTLS(s.CertFile, s.KeyFile); err != nil {

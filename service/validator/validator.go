@@ -2,10 +2,9 @@ package validator
 
 import (
 	"crypto/x509"
-	"github.com/spiffe/go-spiffe/uri"
 	"errors"
+	"github.com/spiffe/go-spiffe/uri"
 )
-
 
 type Validator interface {
 	ValidateID(id string, cert *x509.Certificate) error
@@ -14,7 +13,6 @@ type Validator interface {
 // ErrInvalidaID is returned when the Certificate does not contain
 // a Spiffe ID that is recognized by the server
 var ErrInvalidID = errors.New("Certificate ID is not valid ")
-
 
 // SvidValidator implements the Validator interface to validate
 // SVID certificates
