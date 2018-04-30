@@ -1,7 +1,8 @@
 ## SVID basic validation
 
 ##### This example contains: 
- - A HTTP-based SPIFFE Verifiable Identity Document (SVID) validation service that takes a SPIFFE ID as a configuration parameter. 
+ - A HTTP-based SPIFFE Verifiable Identity Document [SVID](https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md) validation service that takes a SPIFFE ID as a configuration parameter. 
+ The service uses [go-spiffe](https://github.com/spiffe/go-spiffe) to parse the SVID and obtain the Subject Alternative Name
  - A client that connects over mTLS using an SVID.
      
 ###### The service returns:
@@ -14,7 +15,7 @@
 ###### Get the code and dependencies
 
 ```
-go get github.com/maxlambrecht/svid-exercise
+go get -u github.com/maxlambrecht/svid-exercise
 cd ~/go/src/github.com/maxlambrecht/svid-exercise
 go get ./... 
 ```
