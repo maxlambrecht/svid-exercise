@@ -16,8 +16,8 @@
 
 ```
 $ go get -u github.com/maxlambrecht/svid-exercise
-cd ~/go/src/github.com/maxlambrecht/svid-exercise
-go get ./... 
+$ cd ~/go/src/github.com/maxlambrecht/svid-exercise
+$ go get ./... 
 ```
 
 
