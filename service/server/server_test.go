@@ -111,13 +111,13 @@ func TestHTTPSServer(t *testing.T) {
 }
 
 func createClient(cert string, key string) *http.Client {
-	x509, err := tls.LoadX509KeyPair(cert, key)
+	certificate, err := tls.LoadX509KeyPair(cert, key)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	tlsConfig := &tls.Config{
-		Certificates:       []tls.Certificate{x509},
+		Certificates:       []tls.Certificate{certificate},
 		InsecureSkipVerify: true,
 	}
 
