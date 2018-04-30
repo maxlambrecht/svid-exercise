@@ -23,6 +23,7 @@ type AuthServer struct {
 }
 
 // Channels to enable sending the server a signal to shutdown
+// They are not exported since they are only used in tests
 var shutdown = make(chan int)
 var done = make(chan int)
 
@@ -40,12 +41,18 @@ func (s *AuthServer) Start() {
 	http.HandleFunc("/auth", s.authenticateHandler)
 
 
-	// Define a way to send a signal to the server to shutdown
+	// Defines a way to send a signal to the server to shutdown
 	// Used as a workaround to handle the shutdown in integration tests
+	// It could be used as a way to gracefully shutdown the server when
+	// a 'interrupt' signal is received, but it needs to be improved
+	// for handling pending connections before shutting down. That
+	// would no be useful in this exercise, thus it's not developed further
 	go func() {
+		// Waiting for 'shutdown' signal
 		<-shutdown
 		server.Close()
-		close(done)
+		// Send 'done' signal
+		done<-1
 	}()
 
 
