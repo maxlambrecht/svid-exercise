@@ -35,6 +35,29 @@ Authentication Failed. Invalid SpiffeID
 
 ```
 go test ./... -v -cover
+
+=== RUN   TestAuthenticateHandler
+=== RUN   TestAuthenticateHandler/valid_ID
+=== RUN   TestAuthenticateHandler/invalid_ID
+--- PASS: TestAuthenticateHandler (0.00s)
+    --- PASS: TestAuthenticateHandler/valid_ID (0.00s)
+    --- PASS: TestAuthenticateHandler/invalid_ID (0.00s)
+=== RUN   TestHTTPSServer
+Server listening on address :3457
+--- PASS: TestHTTPSServer (0.05s)
+PASS
+coverage: 87.5% of statements
+ok      github.com/maxlambrecht/svid-exercise/service/server    0.055s  coverage: 87.5% of statements
+=== RUN   TestValidateID
+=== RUN   TestValidateID/Recognized_Spiffe_ID
+=== RUN   TestValidateID/Unrecognized_Spiffe_ID
+--- PASS: TestValidateID (0.00s)
+    --- PASS: TestValidateID/Recognized_Spiffe_ID (0.00s)
+    --- PASS: TestValidateID/Unrecognized_Spiffe_ID (0.00s)
+PASS
+coverage: 85.7% of statements
+ok      github.com/maxlambrecht/svid-exercise/service/validator        coverage: 85.7% of statements
+
 ```
 
 #### Appendix
