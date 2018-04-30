@@ -26,7 +26,7 @@ go run service/main.go --spiffeid spiffe://example.com/service --cert certs/serv
 Server listening on address :3000
 ```
 
-By default the server listen on _https://localhost:3000_
+By default the server listens on _https://localhost:3000_
 You can use another address using the option _--addr_
 
 ###### Run the Client
