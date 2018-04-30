@@ -27,7 +27,13 @@ Server listening on address :3000
 ```
 
 By default the server listens on _https://localhost:3000_
-You can use another address using the option _--addr_
+To listen on another address use the option _--addr_
+For example
+
+```
+go run service/main.go --spiffeid spiffe://example.com/service --cert certs/server_cert.pem --key certs/server_key.pem --addr localhost:4000
+Server listening on address localhost:4000
+```
 
 ###### Run the Client
 
@@ -45,8 +51,16 @@ Response code: 401
 Authentication Failed. Invalid SpiffeID
 ```
 
-By default the client sends the request to _https://localhost:3000/auth_
-You can use another address using the option _--url_
+By default the client sends the requests to _https://localhost:3000/auth_
+To send the requests to another address use the option _--url_ 
+For example
+
+```
+go run client/main.go --cert certs/client_cert.pem --key certs/client_key.pem --url https://localhost:4000/auth
+Response code: 200
+Authentication Succeed
+```
+
 
 ###### Run Tests
 
