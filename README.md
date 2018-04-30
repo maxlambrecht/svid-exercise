@@ -11,6 +11,15 @@
 
 ##### How to run the example
 
+###### Get the code and the dependencies
+
+```
+go get github.com/maxlambrecht/svid-exercise
+cd ~/go/src/github.com/maxlambrecht/svid-exercise
+go get ./... 
+```
+
+
 ###### Run the Server
 ```
 go run service/main.go --spiffeid spiffe://example.com/service --cert certs/server_cert.pem --key certs/server_key.pem
