@@ -39,14 +39,14 @@ Server listening on address localhost:4000
 
 ```
 # using a certificate that has a Subject Alternative Name=spiffe://example.com/service:
-$ go run client/main.go --cert certs/client_cert.pem --key certs/client_key.pem 
+$ go run client/main.go --cert certs/client.crt --key certs/client.key --ca certs/rootCA.crt
 Response code: 200
 Authentication Succeed
 ```
 
 ```
 # using a certificate with an untrusted Subject Alternative Name or not SAN at all
-$ go run client/main.go --cert certs/unknown_client_cert.pem --key certs/unknown_client_key.pem
+$  go run client/main.go --cert certs/other_client.crt --key certs/other_client.key --ca certs/rootCA.crt 
 Response code: 401
 Authentication Failed. Invalid SpiffeID
 ```
@@ -55,7 +55,7 @@ By default the client sends the requests to _https://localhost:3000/auth_
 To send the requests to another address use the option _--url_ 
 
 ```
-$ go run client/main.go --cert certs/client_cert.pem --key certs/client_key.pem --url https://localhost:4000/auth
+$ go run client/main.go --cert certs/client.crt --key certs/client.key --ca certs/rootCA.crt --url https://localhost:4000/auth
 Response code: 200
 Authentication Succeed
 ```
@@ -90,9 +90,24 @@ ok      github.com/maxlambrecht/svid-exercise/service/validator        coverage:
 
 ```
 
-#### Appendix
+### Appendix
 
-##### Create certificate
+##### Create certificates
+
+###### Create a ROOT CA key
+openssl genrsa -des3 -out rootCA.key 4096
+
+###### Create and self sign the Root Certificate
+openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1024 -out rootCA.crt
+
+##### Client Certificate
+
+###### Generate key
+openssl genrsa -out client.key 2048
+
+###### Generate csr
+openssl req -new -key client.key -out client.csr -subj "/C=US/ST=US/L=us/O=client/OU=client/CN=client" 
+
 
 Edit SpiffeID in file _certs/conf.cnf_:
 
@@ -102,20 +117,25 @@ URI.1  = spiffe://example.com/service
 
 ```
 
-Run _generate-cert.sh_ in directory _certs_:
+###### Generate certificate signed with rootCA
+openssl x509 -req -in client.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -out client.crt -days 500 -sha256 -extfile conf.cnf -extensions usr_cert
 
-```
-sh generate-cert.sh cert_file.pem key_file.pem
-```
-
-Run _view-cert-san.sh_ to verify the SpiffeID in the Certificate:
+###### View
+openssl x509 -in client.crt -text -noout 
 
 
-```
-sh view-cert-san.sh cert1.pem
+##### Server Certificate
 
-X509v3 Subject Alternative Name: 
-                URI:spiffe://example.com/service
+###### Generate key
+openssl genrsa -out server.key 2048
 
-```
+###### Generate csr
+openssl req -new -key server.key -out server.csr -subj "/C=US/ST=US/L=us/O=server/OU=server/CN=localhost" 
+
+###### Generate certificate signed with rootCA
+openssl x509 -req -in server.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -out server.crt -days 500 -sha256
+
+###### View
+openssl x509 -in server.crt -text -noout 
+
 

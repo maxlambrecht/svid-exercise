@@ -60,16 +60,20 @@ func TestAuthenticateHandler(t *testing.T) {
 // the SpiffeID in the SVID x509 certificates sent by the clients using TLS
 func TestHTTPSServer(t *testing.T) {
 
-	cert := path.Join(assetsDir, "cert.pem")
-	key := path.Join(assetsDir, "key.pem")
-	untrustedCert := path.Join(assetsDir, "untrusted_cert.pem")
-	untrustedKey := path.Join(assetsDir, "untrusted_key.pem")
+	caCert := path.Join(assetsDir, "rootCA.crt")
+	serverCert := path.Join(assetsDir, "server.crt")
+	serverKey := path.Join(assetsDir, "server.key")
+	clientCert := path.Join(assetsDir, "client.crt")
+	clientKey := path.Join(assetsDir, "client.key")
+	untrustedClientCert := path.Join(assetsDir, "other_client.crt")
+	untrustedClientKey := path.Join(assetsDir, "other_client.key")
 
 	authServer := AuthServer{
 		Addr:          ":3457",
 		SpiffeID:      "spiffe://example.com/service",
-		CertFile:      cert,
-		KeyFile:       key,
+		CertFile:      serverCert,
+		KeyFile:       serverKey,
+		CaCert:        caCert,
 		CertValidator: validator.SvidValidator{},
 	}
 
@@ -79,7 +83,7 @@ func TestHTTPSServer(t *testing.T) {
 	}()
 
 	// Create a client with a trusted SpiffeID
-	client := createClient(cert, key)
+	client := createClient(clientCert, clientKey, caCert)
 
 	// Perform a the authentication request
 	res, err := client.Get("https://localhost:3457/auth")
@@ -93,7 +97,7 @@ func TestHTTPSServer(t *testing.T) {
 	}
 
 	// Create a client with an untrusted SpiffeID
-	client = createClient(untrustedCert, untrustedKey)
+	client = createClient(untrustedClientCert, untrustedClientKey, caCert)
 
 	// Perform a the authentication request
 	res2, err := client.Get("https://localhost:3457/auth")
@@ -110,15 +114,16 @@ func TestHTTPSServer(t *testing.T) {
 	shutdown <- 1
 }
 
-func createClient(cert string, key string) *http.Client {
+func createClient(cert, key, caCert string) *http.Client {
 	certificate, err := tls.LoadX509KeyPair(cert, key)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	tlsConfig := &tls.Config{
-		Certificates:       []tls.Certificate{certificate},
-		InsecureSkipVerify: true,
+		ClientAuth:   tls.RequireAndVerifyClientCert,
+		Certificates: []tls.Certificate{certificate},
+		RootCAs:      loadCaCertificate(caCert),
 	}
 
 	transport := &http.Transport{TLSClientConfig: tlsConfig}

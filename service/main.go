@@ -11,12 +11,14 @@ var addr string
 var spiffeID string
 var certPath string
 var keyPath string
+var caCertPath string
 
 func init() {
 	flag.StringVar(&addr, "addr", ":3000", "TCP address to listen on")
 	flag.StringVar(&spiffeID, "spiffeid", "", "Spiffe ID")
 	flag.StringVar(&certPath, "cert", "", "Client Certificate File")
 	flag.StringVar(&keyPath, "key", "", "Client Certificate Key File")
+	flag.StringVar(&caCertPath, "cacert", "", "Client CA certificate")
 	flag.Parse()
 }
 
@@ -43,6 +45,7 @@ func main() {
 		CertFile:      certPath,
 		KeyFile:       keyPath,
 		CertValidator: validator.SvidValidator{},
+		CaCert:        caCertPath,
 	}
 
 	authServer.Start()

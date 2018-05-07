@@ -2,7 +2,9 @@ package server
 
 import (
 	"crypto/tls"
+	"crypto/x509"
 	"github.com/maxlambrecht/svid-exercise/service/validator"
+	"io/ioutil"
 	"log"
 	"net/http"
 )
@@ -14,7 +16,9 @@ import (
 type AuthServer struct {
 	Addr     string
 	CertFile string
-	KeyFile  string
+	//Path to the Client CA Root Certificate
+	CaCert  string
+	KeyFile string
 	// SVID SpiffeID that is trusted by the server and will be used
 	// to validate the SVID certificate provided by the client
 	SpiffeID string
@@ -30,8 +34,8 @@ var done = make(chan int)
 // Configure an instance of an http.Server and run it
 func (s *AuthServer) Start() {
 	cfg := &tls.Config{
-		ClientAuth:         tls.RequireAnyClientCert,
-		InsecureSkipVerify: true,
+		ClientAuth: tls.RequireAndVerifyClientCert,
+		ClientCAs:  loadCaCertificate(s.CaCert),
 	}
 	server := &http.Server{
 		Addr:      s.Addr,
@@ -73,4 +77,15 @@ func (s *AuthServer) authenticateHandler(response http.ResponseWriter, request *
 		return
 	}
 	response.WriteHeader(200)
+}
+
+func loadCaCertificate(caPath string) *x509.CertPool {
+	caCert, err := ioutil.ReadFile(caPath)
+	if err != nil {
+		log.Fatal("Unable to open cert", err)
+	}
+
+	caCertPool := x509.NewCertPool()
+	caCertPool.AppendCertsFromPEM(caCert)
+	return caCertPool
 }

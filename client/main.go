@@ -2,8 +2,10 @@ package main
 
 import (
 	"crypto/tls"
+	"crypto/x509"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 )
@@ -11,11 +13,13 @@ import (
 var url string
 var certPath string
 var keyPath string
+var caCertPath string
 
 func init() {
 	flag.StringVar(&url, "url", "https://localhost:3000/auth", "Authentication service url")
 	flag.StringVar(&certPath, "cert", "", "Client Certificate File")
 	flag.StringVar(&keyPath, "key", "", "Client Certificate Key File")
+	flag.StringVar(&caCertPath, "ca", "", "CA Certificate File")
 	flag.Parse()
 }
 
@@ -39,8 +43,10 @@ func main() {
 
 	// Setup HTTPS client
 	tlsConfig := &tls.Config{
-		Certificates:       []tls.Certificate{cert},
-		InsecureSkipVerify: true,
+		ClientAuth:   tls.RequireAndVerifyClientCert,
+		Certificates: []tls.Certificate{cert},
+		//Set the Server CA Root Certificate
+		RootCAs: loadCaCertificate(caCertPath),
 	}
 
 	// Configure the client
@@ -63,4 +69,15 @@ func main() {
 		fmt.Println("Authentication Failed. Error not identified")
 
 	}
+}
+
+func loadCaCertificate(caPath string) *x509.CertPool {
+	caCert, err := ioutil.ReadFile(caPath)
+	if err != nil {
+		log.Fatal("Unable to open cert", err)
+	}
+
+	caCertPool := x509.NewCertPool()
+	caCertPool.AppendCertsFromPEM(caCert)
+	return caCertPool
 }
